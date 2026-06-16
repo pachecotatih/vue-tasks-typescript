@@ -1,12 +1,20 @@
 <template>
-  <div>
-    <header>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/register">Cadastre-se</router-link>
-      <router-link to="/tasks">Tarefas</router-link>
-    </header>
-    <main>
+  <div
+    class="min-h-screen bg-tasks-gray-50 dark:bg-tasks-gray-900 transition-colors duration-200"
+  >
+    <NavBar />
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
       <router-view />
     </main>
   </div>
 </template>
+<script>
+import NavBar from './components/NavBar.vue';
+
+export default {
+  name: 'App',
+  components: {
+    NavBar
+  }
+}
+</script>
