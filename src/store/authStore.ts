@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {ref, computed} from "vue";
-import { authService } from "@/services/authService";
-import {storage} from "@/utils/storage";
+import { authService } from "../services/authService";
+import {storage} from "../utils/storage";
 import {useRouter} from "vue-router";
 
 export const useAuthStore = defineStore('auth', () => {
@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref(storage.get('token'));
     const loading = ref(false);
     const error = ref(null);
+    
 
     const isAuthenticated = computed(() => !!token.value);
     const currentUser = computed(() => user.value);
@@ -17,7 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
     const hasError = computed(() => error.value);
     const userName = computed(() => user.value?.username || '');
 
-    const login = async (credentials) => {
+    const login = async (credentials: {username: string, password: string}) => {
         loading.value = true;
         error.value = null;
         try {
@@ -30,6 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
             storage.set('token', response.token);
             storage.set('user', JSON.stringify(user.value));
             router.push('/tasks');
+            
 
             return response;
         } catch (e) {

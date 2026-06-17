@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {storage} from '@/utils/storage';
+import {storage} from '../utils/storage';
 export const api = axios.create({
     baseURL: 'http://localhost:3000/api',
     timeout: 30000

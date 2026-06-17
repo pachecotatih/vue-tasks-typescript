@@ -9,9 +9,11 @@
         z-50"
     >
         <div class="flex items-center gap-4">
-            <MenuItem redirect-to="/login" label="Login"/>
-            <MenuItem redirect-to="/register" label="Cadastre-se"/>
-            <MenuItem redirect-to="/tasks" label="Tarefas"/>
+            <BookOpenCheck class="ml-4 h-8 w-8 text-tasks-pink-500 dark:text-tasks-pink-400"/>
+            <span v-if="isAuthenticated" class="text-tasks-gray-700 dark:text-tasks-gray-300">Olá, {{ userName }}</span>
+            <MenuItem v-if="!isAuthenticated" redirect-to="/login" label="Login"/>
+            <MenuItem v-if="!isAuthenticated" redirect-to="/register" label="Cadastre-se"/>
+            <MenuItem v-if="isAuthenticated" redirect-to="/tasks" label="Tarefas"/>
             <button
         @click="toggleTheme"
         class="
@@ -33,7 +35,7 @@
             hover:text-tasks-pink-500 
             dark:hover:text-tasks-pink-400"
         >
-            {{ isDark ? 'Modo Escuro' : 'Modo Claro' }}
+            {{ isDark ? 'Modo Claro' : 'Modo Escuro' }}
         </button>
         </div>
         
@@ -41,19 +43,28 @@
 </template>
 
 <script>
+import { BookOpenCheck } from 'lucide-vue-next';
+import { useAuthStore } from '../store/authStore.ts';
 import MenuItem from './MenuItem.vue';
 import { useTheme } from '@/composables/useTheme';
+import { computed } from 'vue';
 export default {
     name: 'NavBar',
     components: {
-        MenuItem
+        MenuItem,
+        BookOpenCheck
     },
     setup() {
         const {isDark, toggleTheme} = useTheme();
-
+        const authStore = useAuthStore();
+        authStore.checkAuth();
+        const isAuthenticated = computed(() => authStore.isAuthenticated);
+        const userName = computed(() => authStore.userName);
         return {
             isDark,
-            toggleTheme
+            toggleTheme,
+            isAuthenticated,
+            userName
         }
     }
 }
