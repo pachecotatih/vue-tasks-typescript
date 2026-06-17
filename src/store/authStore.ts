@@ -33,6 +33,10 @@ export const useAuthStore = defineStore('auth', () => {
 
             return response;
         } catch (e) {
+            if(e.isAuthError) {
+                error.value = e.message;
+                throw e;
+            }
             error.value = e.response?.data?.message || 'Ocorreu um erro ao fazer login';
             console.error('Erro ao fazer login', e);
             throw e;

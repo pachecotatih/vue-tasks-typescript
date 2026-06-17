@@ -95,6 +95,9 @@
             </button>
         </div>
        </form>
+       <div v-if="authStore?.error" class="mt-6 bg-red-300 text-red-600 p-4 font-bold rounded-lg">
+        <p>{{ authStore?.error }}</p>
+       </div>
        </div>
     </div>
 </template>
@@ -151,7 +154,8 @@ export default {
             showPassword,
             form,
             togglePasswordVisibility,
-            handleLogin
+            handleLogin,
+            authStore
         }
     }
 }
