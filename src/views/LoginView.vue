@@ -25,19 +25,19 @@
             </router-link>
            </p>
        </div>
-       <form class="mt-8 space-y-6">
+       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="space-y-4">
             <div>
-                <label for="user" class="sr-only">Usuário</label>
+                <label for="username" class="sr-only">Usuário</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <User class="h-5 w-5 text-tasks-gray-400 z-10"/>
                     </div>
                     <input 
-                        v-model="form.user"
+                        v-model="form.username"
                         type="text" 
-                        id="user"
-                        name="user" 
+                        id="username"
+                        name="username" 
                         required 
                         placeholder="Digite o nome do seu usuário"
                         :class="[
@@ -102,6 +102,7 @@
 import { BookOpenCheck, Eye, EyeOff, Lock, LogIn, User } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../store/authStore';
 export default {
     name: 'LoginView',
     components: {
@@ -112,14 +113,16 @@ export default {
         LogIn,
         User,
         useRouter,
-        ref
+        ref,
+        useAuthStore
     },
     setup() {
         const router = useRouter();
         const loading = ref(false);
         const showPassword = ref(false);
+        const authStore = useAuthStore();
         const form = ref({
-            user: '',
+            username: '',
             password: ''
         });
 
@@ -130,11 +133,25 @@ export default {
                 passwordInput.type = showPassword.value ? 'text' : 'password';
             }
         };
+
+        const handleLogin = async () => {
+            try {
+                loading.value = true;
+                await authStore.login(form.value);
+                router.push('/tasks');
+            } catch (error) {
+                console.error(error);
+            } finally {
+                loading.value = false;
+            }
+        };
+
         return {
             loading,
             showPassword,
             form,
-            togglePasswordVisibility
+            togglePasswordVisibility,
+            handleLogin
         }
     }
 }
