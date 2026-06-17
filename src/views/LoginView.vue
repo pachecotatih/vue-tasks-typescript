@@ -141,7 +141,6 @@ export default {
             try {
                 loading.value = true;
                 await authStore.login(form.value);
-                router.push('/tasks');
             } catch (error) {
                 console.error(error);
             } finally {

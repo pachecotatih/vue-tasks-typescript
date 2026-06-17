@@ -57,7 +57,6 @@ export default {
     setup() {
         const {isDark, toggleTheme} = useTheme();
         const authStore = useAuthStore();
-        authStore.checkAuth();
         const isAuthenticated = computed(() => authStore.isAuthenticated);
         const userName = computed(() => authStore.userName);
         return {

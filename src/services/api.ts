@@ -1,5 +1,12 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {storage} from '../utils/storage';
+
+export interface AuthError extends Error {
+    isAuthError?: boolean
+    response?: unknown
+
+}
+
 export const api = axios.create({
     baseURL: 'http://localhost:3000/api',
     timeout: 30000
@@ -16,12 +23,13 @@ api.interceptors.request.use(config =>
     (error) => Promise.reject(error)
 )
 
-api.interceptors.response.use(response => response,
-    (error) => {
-        if(error.response.status === 401) {
+api.interceptors.response.use(
+    response => response,
+    (error: AxiosError) => {
+        if(error.response?.status === 401) {
             storage.remove('token');
             storage.remove('user');
-            const authError = new Error('Usuário e/ou senha inválidos!');
+            const authError: AuthError = new Error('Usuário e/ou senha inválidos!');
             authError.response = error.response;
             authError.isAuthError = true;
             return Promise.reject(authError);
