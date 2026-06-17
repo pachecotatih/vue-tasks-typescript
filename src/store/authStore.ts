@@ -93,6 +93,13 @@ export const useAuthStore = defineStore('auth', () => {
             loading.value = false;
         }
     }
+    const logout = ():void => {
+        user.value = null;
+        token.value = null;
+        storage.remove('token');
+        storage.remove('user');
+        router.push('/login');
+    }
 
         return {
             user,
@@ -106,6 +113,7 @@ export const useAuthStore = defineStore('auth', () => {
             userName,
             login,
             checkAuth,
-            register
+            register,
+            logout
         }
 });

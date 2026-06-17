@@ -14,29 +14,53 @@
             <MenuItem v-if="!isAuthenticated" redirect-to="/login" label="Login"/>
             <MenuItem v-if="!isAuthenticated" redirect-to="/register" label="Cadastre-se"/>
             <MenuItem v-if="isAuthenticated" redirect-to="/tasks" label="Tarefas"/>
+            <button 
+                v-if="isAuthenticated"
+                class="
+                px-4 
+                py-2 
+                rounded-lg 
+                text-tasks-gray-600 
+                dark:text-tasks-gray-300 
+                bg-transparent 
+                border 
+                border-tasks-gray-200 
+                dark:border-tasks-gray-800 
+                cursor-pointer 
+                transition-all 
+                duration-200 
+                font-medium 
+                hover:bg-tasks-gray-50 
+                dark:hover:bg-tasks-gray-800 
+                hover:text-tasks-pink-500 
+                dark:hover:text-tasks-pink-400"
+                @click="logout"
+            >
+                Sair da Conta
+            </button>
             <button
-        @click="toggleTheme"
-        class="
-            px-4 
-            py-2 
-            rounded-lg 
-            text-tasks-gray-600 
-            dark:text-tasks-gray-300 
-            bg-transparent 
-            border 
-            border-tasks-gray-200 
-            dark:border-tasks-gray-800 
-            cursor-pointer 
-            transition-all 
-            duration-200 
-            font-medium 
-            hover:bg-tasks-gray-50 
-            dark:hover:bg-tasks-gray-800 
-            hover:text-tasks-pink-500 
-            dark:hover:text-tasks-pink-400"
-        >
-            {{ isDark ? 'Modo Claro' : 'Modo Escuro' }}
-        </button>
+            @click="toggleTheme"
+            class="
+                px-4 
+                py-2 
+                rounded-lg 
+                text-tasks-gray-600 
+                dark:text-tasks-gray-300 
+                bg-transparent 
+                border 
+                border-tasks-gray-200 
+                dark:border-tasks-gray-800 
+                cursor-pointer 
+                transition-all 
+                duration-200 
+                font-medium 
+                hover:bg-tasks-gray-50 
+                dark:hover:bg-tasks-gray-800 
+                hover:text-tasks-pink-500 
+                dark:hover:text-tasks-pink-400"
+            >
+                {{ isDark ? 'Modo Claro' : 'Modo Escuro' }}
+            </button>
         </div>
         
       </header>
@@ -59,11 +83,14 @@ export default {
         const authStore = useAuthStore();
         const isAuthenticated = computed(() => authStore.isAuthenticated);
         const userName = computed(() => authStore.userName);
+
+        const logout = () => authStore.logout();
         return {
             isDark,
             toggleTheme,
             isAuthenticated,
-            userName
+            userName,
+            logout
         }
     }
 }
