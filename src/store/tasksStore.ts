@@ -8,6 +8,8 @@ export const useTasksStore = defineStore('tasks', () => {
     const error = ref<string | null>(null);
     const loading = ref<boolean>(false);
     const editingTaskId = ref<number | null>(null);
+    const draggedTaskId = ref<number | null>(null);
+    const dragOverTarget = ref<string | null>(null);
 
     const pendingTasks = computed(() => tasks.value.filter(task => !task.done));
     const completedTasks = computed(() => tasks.value.filter(task => task.done));
@@ -114,6 +116,41 @@ export const useTasksStore = defineStore('tasks', () => {
             loading.value = false;
         }
     }
+
+    // task que estou movimentando
+    const setDraggedTask = (task: Task): void => {
+        draggedTaskId.value = task.id;
+    }
+
+    // para onde estou movimentando
+    const setDragOverTarget = (target: string | null): void => {
+        dragOverTarget.value = target;
+    }
+
+    // quando soltar a movimentação
+    const clearDraggedTask = (): void => {
+        draggedTaskId.value = null;
+        dragOverTarget.value = null;
+    }
+
+    const handleDrop = async (taskId: number, targetDone: boolean): Promise<void> => {
+        const task = tasks.value.find((t) => t.id === taskId);
+
+        if(!task || task.done === targetDone){
+            clearDraggedTask();
+            return;
+        }
+
+        try {
+            await toggleTask(taskId, targetDone);
+        } catch (error) {
+            console.error('Erro ao mover a tarefa:', error);
+        } finally {
+            clearDraggedTask();
+        }
+    }
+
+
     return {
         tasks,
         error,
@@ -126,6 +163,12 @@ export const useTasksStore = defineStore('tasks', () => {
         completedTasks,
         toggleTask,
         editingTaskId,
-        setEditingTask
+        setEditingTask,
+        setDraggedTask,
+        setDragOverTarget,
+        handleDrop,
+        clearDraggedTask,
+        draggedTaskId,
+        dragOverTarget
     }
 });

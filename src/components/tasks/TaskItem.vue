@@ -1,8 +1,12 @@
 <template>
     <div 
+        :draggable="true"
+        @dragstart="handleDragStart"
+        @dragend="tasksStore.clearDraggedTask"
         :class="[
             'bg-white dark:bg-tasks-gray-800 rounded-lg border border-tasks-gray-200 dark:border-tasks-gray-700',
             'flex items-center gap-4 transition-all',
+            tasksStore.draggedTaskId === task.id ? 'opacity-50' : 'hover: shadow-md',
             task.done ? 'opacity-60':''
         ]"
     >
@@ -114,7 +118,7 @@
                 editingTitle.value = props.task.titulo;
                 tasksStore.setEditingTask(props.task);
             }
-            const isEditing = computed(() => tasksStore.editingTaskId === props.task.id);
+            const isEditing = computed(() => tasksStore.editingTaskId?.value === props.task.id);
 
             const cancelTaskEdit = () => {
                 editingTitle.value = '';
@@ -171,6 +175,11 @@
                     console.error(error);
                 }
             }
+            const handleDragStart = (event) => {
+                tasksStore.setDraggedTask(props.task);
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', props.task.id.toString());
+            }
             return {
                 handleToggleTask,
                 isEditing,
@@ -178,7 +187,9 @@
                 editingTitle,
                 cancelTaskEdit,
                 saveTaskEdit,
-                handleDeleteTask
+                handleDeleteTask,
+                handleDragStart,
+                tasksStore
             };
         },
     }
