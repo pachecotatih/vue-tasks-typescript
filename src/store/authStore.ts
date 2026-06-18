@@ -1,14 +1,14 @@
 import {defineStore} from "pinia";
 import {ref, computed} from "vue";
-import { authService, type AuthResponse, type LoginCredentials } from "../services/authService";
 import {storage} from "../utils/storage";
 import {useRouter} from "vue-router";
-import type { AuthError } from "../services/api";
+import type { User } from "../interfaces/User";
+import type { LoginCredentials } from "../interfaces/LoginCredentials";
+import type { AuthResponse } from "../interfaces/AuthResponse";
+import { authService } from "../services/authService";
+import type { AuthError } from "../interfaces/AuthError";
 
-export interface User {
-    id: number;
-    username: string;
-}
+
 
 export const useAuthStore = defineStore('auth', () => {
     const router = useRouter();
@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', () => {
                 error.value = authError.message;
                 throw e;
             }
-            error.value = (authError.response as {data?: {message?:string}})?.data?.message || 'Ocorreu um erro ao fazer login';
+            error.value = (authError.response as {data?: {message?:string}})?.data?.message || 'Erro ao fazer login';
             console.error('Erro ao fazer login', e);
             throw e;
         } finally {
@@ -86,7 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
                 error.value = authError.message;
                 throw e;
             }
-            error.value = (authError.response as {data?: {message?:string}})?.data?.message || 'Ocorreu um erro ao fazer cadastro';
+            error.value = (authError.response as {data?: {message?:string}})?.data?.message || 'Erro ao fazer cadastro';
             console.error('Erro ao fazer cadastro', e);
             throw e;
         } finally {

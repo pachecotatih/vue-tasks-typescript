@@ -1,11 +1,8 @@
 import axios, {AxiosError} from 'axios';
 import {storage} from '../utils/storage';
+import type { AuthError } from '../interfaces/AuthError';
 
-export interface AuthError extends Error {
-    isAuthError?: boolean
-    response?: unknown
 
-}
 
 export const api = axios.create({
     baseURL: 'http://localhost:3000/api',
