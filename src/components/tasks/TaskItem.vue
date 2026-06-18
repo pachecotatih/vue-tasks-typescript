@@ -2,11 +2,11 @@
     <div 
         :draggable="true"
         @dragstart="handleDragStart"
-        @dragend="tasksStore.clearDraggedTask"
+        @dragend="clearDraggedTask"
         :class="[
             'bg-white dark:bg-tasks-gray-800 rounded-lg border border-tasks-gray-200 dark:border-tasks-gray-700',
             'flex items-center gap-4 transition-all',
-            tasksStore.draggedTaskId === task.id ? 'opacity-50' : 'hover: shadow-md',
+            draggedTaskId === task.id ? 'opacity-50' : 'hover: shadow-md',
             task.done ? 'opacity-60':''
         ]"
     >
@@ -180,6 +180,8 @@
                 event.dataTransfer.effectAllowed = 'move';
                 event.dataTransfer.setData('text/plain', props.task.id.toString());
             }
+            const draggedTaskId = tasksStore.draggedTaskId;
+            const clearDraggedTask = () => tasksStore.clearDraggedTask();
             return {
                 handleToggleTask,
                 isEditing,
@@ -189,7 +191,8 @@
                 saveTaskEdit,
                 handleDeleteTask,
                 handleDragStart,
-                tasksStore
+                draggedTaskId,
+                clearDraggedTask
             };
         },
     }
