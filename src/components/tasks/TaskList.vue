@@ -8,7 +8,6 @@
                     v-for="item in tasks" 
                     :key="item.id" 
                     :task="item"
-                    @toggle="(id, done) => $emit('toggle', id, done)"
                 />
         </div>
     </div>
@@ -30,7 +29,6 @@ import TaskItem from './TaskItem.vue';
                 type: Array,
                 required: true
             }
-        },
-        emits: ['toggle']
+        }
     }
 </script>

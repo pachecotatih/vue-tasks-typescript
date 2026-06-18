@@ -34,12 +34,10 @@
                 <TaskList 
                     title="Pendentes" 
                     :tasks="taskStore.pendingTasks"
-                    @toggle="handleToggleTask"
                 />
                 <TaskList 
                     title="Concluídas" 
-                    :tasks="taskStore.completedTasks" 
-                    @toggle="handleToggleTask"
+                    :tasks="taskStore.completedTasks"
                 />
             </div>
         </div>
@@ -70,18 +68,11 @@
                 }
             };
 
-             const handleToggleTask = async (id, done) => {
-                try {
-                    await taskStore.toggleTask(id, done);
-                } catch (err) {
-                    console.error("Erro ao atualizar tarefa:", err);
-                }
-            };
+            
 
             return {
                 taskStore,
-                handleCreateTask,
-                handleToggleTask
+                handleCreateTask
             }
         }
     }
